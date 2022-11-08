@@ -1,3 +1,4 @@
 joblib
 plotly
 keras
+tensorflow
