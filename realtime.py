@@ -24,7 +24,7 @@ st.set_page_config(
 
 # Data Prepare
 FilePath = "/app/streamlit/melting_tank_stream.csv"
-scaler_call = joblib.load("/app/streamlit/LSTM_Model.pkl") 
+scaler_call = joblib.load("/app/streamlit/mx_rscaler.pkl") 
 model_call = load_model('/app/streamlit/melting_tank_model.h5')
 
 @st.experimental_memo
