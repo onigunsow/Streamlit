@@ -140,7 +140,7 @@ for seconds in range(df_Length):
                 
         with Tank_Data:
             st.markdown("## Recorded Data View")
-            view_NDF = ndf.drop(['STD_DT'], axis=1)
+            view_NDF = ndf.drop(['STD_DT', 'NUM'], axis=1)
             result_mapping = {
                 1: "OK",
                 0: "NG"
