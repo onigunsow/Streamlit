@@ -1,17 +1,9 @@
-import time  # to simulate a real time data, time loop
-
-import numpy as np  # np mean, np random
-import pandas as pd  # read csv, df manipulation
-import streamlit as st  # 🎈 data web app development
+import time  
+import pandas as pd 
+import streamlit as st 
 import joblib
-# import plotly.figure_factory as ff
 import plotly.graph_objects as go
 from plotly.subplots import make_subplots
-
-
-from pyparsing import empty
-
-
 from keras.models import load_model
 
 
@@ -25,7 +17,7 @@ st.set_page_config(
 # Data Prepare
 FilePath = "/app/streamlit/melting_tank_stream.csv"
 scaler_call = joblib.load("/app/streamlit/mx_rscaler.pkl") 
-model_call = load_model('/app/streamlit/melting_tank_model.h5')
+model_call = load_model('/app/streamlit/melting_tank_pretrained_model.h5')
 
 @st.experimental_memo
 def get_data() -> pd.DataFrame:
@@ -46,7 +38,7 @@ st.title("Dissolution Tank Condition")
 placeholder_1 = st.empty()
 placeholder_2 = st.empty()
 # near real-time simulation
-Pie_Value = [5, 1]
+Pie_Value = [0, 0]
 for seconds in range(df_Length):
     
     ndf = df.iloc[seconds:seconds+30]
@@ -65,10 +57,8 @@ for seconds in range(df_Length):
             Tag_Value=ndf["TAG"][seconds+29]
             if Tag_Value==1:
                 st.success("OK")
-                Pie_Value[0] = Pie_Value[0] + 1
             else:
                 st.error("NG")
-                Pie_Value[1] = Pie_Value[1] + 1 
         with Condition_Est:
             
             st.markdown("## Estimated Condition")
@@ -80,12 +70,12 @@ for seconds in range(df_Length):
             Tag_Est = model_call.predict(new_x_df_scale) 
             
             
-            if Tag_Est > 0.5:
+            if Tag_Est > 0.5595:
                 st.success("OK")
-                # Pie_Value[0] = Pie_Value[0] + 1
+                Pie_Value[0] = Pie_Value[0] + 1
             else:
                 st.error("NG")
-                # Pie_Value[1] = Pie_Value[1] + 1 
+                Pie_Value[1] = Pie_Value[1] + 1 
             
         
     with placeholder_2.container():
@@ -95,7 +85,6 @@ for seconds in range(df_Length):
             st.markdown("## Tank Condition")
             fig = make_subplots(rows=4, cols=1,
                                 subplot_titles=("Melting Temperature", "Motor Speed", "Melt Weight", "INSP"))
-            # fig.update_layout(height = 1400)
             fig.update_layout(margin=dict(l = 20,
                                          r=20,
                                          b=50,
@@ -152,6 +141,11 @@ for seconds in range(df_Length):
         with Tank_Data:
             st.markdown("## Recorded Data View")
             view_NDF = ndf.drop(['STD_DT'], axis=1)
+            result_mapping = {
+                1: "OK",
+                0: "NG"
+                }
+            view_NDF.loc[:,"TAG"]=view_NDF.TAG.map(result_mapping)
             st.dataframe(view_NDF[20:])
 
         
