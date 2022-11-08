@@ -23,9 +23,9 @@ st.set_page_config(
 
 
 # Data Prepare
-FilePath = "melting_tank_stream.csv"
-scaler_call = joblib.load("mx_rscaler.pkl") 
-model_call = load_model('melting_tank_pretrained_model.h5')
+FilePath = "/home/appuser/venv/bin/streamlit/melting_tank_stream.csv"
+scaler_call = joblib.load("/home/appuser/venv/bin/streamlit/mx_rscaler.pkl") 
+model_call = load_model('/home/appuser/venv/bin/streamlit/melting_tank_pretrained_model.h5')
 
 @st.experimental_memo
 def get_data() -> pd.DataFrame:
