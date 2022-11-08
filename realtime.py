@@ -26,7 +26,7 @@ st.set_page_config(
 
 
 # Data Prepare
-FilePath = "D:/02_Works/18_KAMP/melting_tank_stream.csv"
+FilePath = "melting_tank_stream.csv"
 scaler_call = joblib.load("mx_rscaler.pkl") 
 model_call = load_model('melting_tank_pretrained_model.h5')
 
